@@ -47,10 +47,13 @@ def load(input_file, graph=None, session=None):
 
 if __name__ == '__main__':
     sess = tf.Session()
-    graph = load('week1_model.tfg',session=sess)
+    graph = load('resnet32.tfg',session=sess)
     test_files = glob('./test/*') # expects test images to be in test directory
     test_files = sorted(test_files, key = lambda x:int(x.split('\\')[1].split('.png')[0])) # need to change it to work for any system, only Windows right now
+    
     image_test = convert_images(test_files)
+    #image_test = np.load('test.npy')
+    print("Loaded Data!")
     labels_df = pd.read_csv('trainLabels.csv')
     labels_unique = labels_df.label.unique()
 
@@ -60,7 +63,7 @@ if __name__ == '__main__':
 
         output = graph.get_tensor_by_name('output:0')
         final_input = graph.get_tensor_by_name('Identity:0')
-        is_training = graph.get_tensor_by_name('Placeholder_1:0')
+        is_training = graph.get_tensor_by_name('Placeholder_2:0')
 
         for i in range(0,image_test.shape[0],test_batch):
             if i%90000==0:
@@ -74,4 +77,4 @@ if __name__ == '__main__':
         test_df['id'] = pd.Series([i for i in range(1,len(predictions)+1)])
         test_df['label'] = test_df[test_df.columns[0]]
         test_df = test_df[['id','label']]
-        test_df.to_csv('submission.csv',index=False)
+        test_df.to_csv('submission2.csv',index=False)
