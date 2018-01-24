@@ -47,7 +47,7 @@ def load(input_file, graph=None, session=None):
 
 if __name__ == '__main__':
     sess = tf.Session()
-    graph = load('resnet32.tfg',session=sess)
+    graph = load('resnet32_wide.tfg',session=sess)
     test_files = glob('./test/*') # expects test images to be in test directory
     test_files = sorted(test_files, key = lambda x:int(x.split('\\')[1].split('.png')[0])) # need to change it to work for any system, only Windows right now
     
